@@ -46,7 +46,8 @@ def get_sec():
             d=res.json()
             SecMSGEC=d.get('Sec-MS-GEC','')
             SecMSGECVersion=d.get('Sec-MS-GEC-Version','')
-            return SecMSGEC,SecMSGECVersion
+            if SecMSGEC and SecMSGECVersion:
+                return SecMSGEC,SecMSGECVersion
     except:
         pass
     try:
@@ -55,7 +56,8 @@ def get_sec():
             d=res.json()
             SecMSGEC=d.get('Sec-MS-GEC','')
             SecMSGECVersion=d.get('Sec-MS-GEC-Version','')
-            return SecMSGEC,SecMSGECVersion
+            if SecMSGEC and SecMSGECVersion:
+                return SecMSGEC,SecMSGECVersion
     except:
         pass
         
