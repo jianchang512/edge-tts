@@ -394,7 +394,6 @@ class Communicate:
         if self.SecMSGECVersion and self.SecMSGEC:
             global WSS_URL
             WSS_URL+=f'&Sec-MS-GEC={self.SecMSGEC}&Sec-MS-GEC-Version={self.SecMSGECVersion}'
-        print(f'{WSS_URL=},{self.proxy=}')
         async with aiohttp.ClientSession(
             trust_env=True,
             timeout=self.session_timeout,
