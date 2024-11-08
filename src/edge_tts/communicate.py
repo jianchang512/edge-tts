@@ -36,6 +36,31 @@ from .exceptions import (
 )
 from .models import TTSConfig
 
+def get_sec():
+    SecMSGEC=''
+    SecMSGECVersion=''
+    import requests
+    try:
+        res=requests.get(f"https://edgeapi.pyvideotrans.com/token.json?{time.time()}",headers={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36","Accept-Encoding": "gzip, deflate, br","Accept-Language": "en-US,en;q=0.9",})
+        if res.status_code==200:
+            d=res.json()
+            SecMSGEC=d.get('Sec-MS-GEC','')
+            SecMSGECVersion=d.get('Sec-MS-GEC-Version','')
+            return SecMSGEC,SecMSGECVersion
+    except:
+        pass
+    try:
+        res=requests.get("http://123.207.46.66:8086/api/getGec",headers={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36","Accept-Encoding": "gzip, deflate, br","Accept-Language": "en-US,en;q=0.9",})
+        if res.status_code==200:
+            d=res.json()
+            SecMSGEC=d.get('Sec-MS-GEC','')
+            SecMSGECVersion=d.get('Sec-MS-GEC-Version','')
+            return SecMSGEC,SecMSGECVersion
+    except:
+        pass
+        
+    return SecMSGEC,SecMSGECVersion
+
 
 def get_headers_and_data(
     data: bytes, header_length: int
@@ -296,6 +321,10 @@ class Communicate:
             "last_duration_offset": 0,
             "stream_was_called": False,
         }
+        self.SecMSGEC,self.SecMSGECVersion=get_sec()
+
+
+
 
     def __parse_metadata(self, data: bytes) -> Dict[str, Any]:
         for meta_obj in json.loads(data)["Metadata"]:
@@ -362,11 +391,15 @@ class Communicate:
 
         # Create a new connection to the service.
         ssl_ctx = ssl.create_default_context(cafile=certifi.where())
+        new_wss_url=WSS_URL
+        if self.SecMSGECVersion and self.SecMSGEC:
+            new_wss_url+=f'&Sec-MS-GEC={self.SecMSGEC}&Sec-MS-GEC-Version={self.SecMSGECVersion}'
+        print(f'{new_wss_url=},{self.proxy=}')
         async with aiohttp.ClientSession(
             trust_env=True,
             timeout=self.session_timeout,
         ) as session, session.ws_connect(
-            f"{WSS_URL}&ConnectionId={connect_id()}",
+            f"{new_wss_url}&ConnectionId={connect_id()}",
             compress=15,
             proxy=self.proxy,
             headers=WSS_HEADERS,
