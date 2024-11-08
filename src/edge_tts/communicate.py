@@ -41,7 +41,7 @@ def get_sec():
     SecMSGECVersion=''
     import requests
     try:
-        res=requests.get(f"https://edgeapi.pyvideotrans.com/token.json?{time.time()}",headers={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36","Accept-Encoding": "gzip, deflate, br","Accept-Language": "en-US,en;q=0.9",})
+        res=requests.get(f"https://edge-sec.myaitool.top/?key=edge",headers={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36","Accept-Encoding": "gzip, deflate, br","Accept-Language": "en-US,en;q=0.9",})
         if res.status_code==200:
             d=res.json()
             SecMSGEC=d.get('Sec-MS-GEC','')
