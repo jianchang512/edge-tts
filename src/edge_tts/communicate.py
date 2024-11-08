@@ -392,7 +392,7 @@ class Communicate:
         # Create a new connection to the service.
         ssl_ctx = ssl.create_default_context(cafile=certifi.where())
         if self.SecMSGECVersion and self.SecMSGEC:
-            WSS_URL+=f'&Sec-MS-GEC={self.SecMSGEC}&Sec-MS-GEC-Version={self.SecMSGECVersion}'
+            WSS_URL=WSS_URL+f'&Sec-MS-GEC={self.SecMSGEC}&Sec-MS-GEC-Version={self.SecMSGECVersion}'
         print(f'{WSS_URL=},{self.proxy=}')
         async with aiohttp.ClientSession(
             trust_env=True,
