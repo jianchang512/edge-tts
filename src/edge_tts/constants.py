@@ -3,7 +3,11 @@
 BASE_URL = "speech.platform.bing.com/consumer/speech/synthesize/readaloud"
 TRUSTED_CLIENT_TOKEN = "6A5AA1D4EAFF4E9FB37E23D68491D6F4"
 
-WSS_URL = f"wss://{BASE_URL}/edge/v1?TrustedClientToken={TRUSTED_CLIENT_TOKEN}"
+#WSS_URL = f"wss://{BASE_URL}/edge/v1?TrustedClientToken={TRUSTED_CLIENT_TOKEN}"
+WSS_URL = (
+    "wss://api.msedgeservices.com/tts/cognitiveservices/websocket/v1"
+    f"?Ocp-Apim-Subscription-Key={TRUSTED_CLIENT_TOKEN}"
+)
 VOICE_LIST = f"https://{BASE_URL}/voices/list?trustedclienttoken={TRUSTED_CLIENT_TOKEN}"
 
 DEFAULT_VOICE = "en-US-EmmaMultilingualNeural"
@@ -36,10 +40,3 @@ VOICE_HEADERS = {
     "Sec-Fetch-Dest": "empty",
 }
 VOICE_HEADERS.update(BASE_HEADERS)
-
-# Audio timing constants for CBR-based offset compensation.
-# The output format "audio-24khz-48kbitrate-mono-mp3" is a 48 kbps constant
-# bitrate stream.  Microsoft's offset/duration metadata uses 100-nanosecond
-# ticks, so 1 second = 10,000,000 ticks.
-TICKS_PER_SECOND = 10_000_000
-MP3_BITRATE_BPS = 48_000
